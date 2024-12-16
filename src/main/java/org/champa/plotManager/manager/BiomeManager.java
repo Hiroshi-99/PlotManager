@@ -24,6 +24,12 @@ public class BiomeManager {
     }
 
     public void changePlotBiome(Plot plot, String biome) {
-        plugin.getPlotHandler().setPlotBiome(plot, biome);
+        try {
+            // Set the biome using the plot's area
+            plot.getArea().setComponent("biome", biome.toLowerCase(), null, null);
+        } catch (Exception e) {
+            plugin.getLogger().warning("Error setting biome: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

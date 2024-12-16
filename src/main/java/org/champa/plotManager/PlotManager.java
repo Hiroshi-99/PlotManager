@@ -28,6 +28,7 @@ public class PlotManager extends JavaPlugin {
         this.menuManager = new MenuManager(this);
 
         // Register command and listener
+        getServer().getPluginManager().registerEvents(new PlotEventListener(this), this);
         getCommand("plot").setExecutor(new PlotCommand(this));
         getServer().getPluginManager().registerEvents(new MenuListener(this), this);
 
@@ -41,6 +42,7 @@ public class PlotManager extends JavaPlugin {
             cacheManager.cleanup();
         }
         getLogger().info("PlotManager disabled successfully!");
+
     }
 
     // Getter methods

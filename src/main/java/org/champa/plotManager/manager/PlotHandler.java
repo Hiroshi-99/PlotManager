@@ -3,6 +3,8 @@ package org.champa.plotManager.manager;
 import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
+import com.plotsquared.core.plot.flag.GlobalFlagContainer;
+import com.plotsquared.core.plot.flag.types.*;
 import org.bukkit.entity.Player;
 import org.champa.plotManager.PlotManager;
 
@@ -30,27 +32,72 @@ public class PlotHandler {
 
     public CompletableFuture<Plot> getCurrentPlot(Player player) {
         return CompletableFuture.supplyAsync(() -> {
-            Location location = player.getLocation();
-            return plotAPI.getPlot(location);
+            com.plotsquared.core.location.Location plotLocation =
+                    com.plotsquared.core.location.Location.at(
+                            player.getWorld().getName(),
+                            player.getLocation().getBlockX(),
+                            player.getLocation().getBlockY(),
+                            player.getLocation().getBlockZ()
+                    );
+            return plotLocation.getPlot();
         });
     }
 
-    public CompletableFuture<Boolean> togglePlotFlag(Plot plot, String flag, String value) {
+    public CompletableFuture<Boolean> togglePlotFlag(Plot plot, String flagName, String value) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                if (value == null) {
-                    // Toggle boolean flag
-                    boolean currentValue = Boolean.parseBoolean(plot.getFlag(flag));
-                    plot.setFlag(flag, String.valueOf(!currentValue));
-                } else {
-                    // Set specific value
-                    plot.setFlag(flag, value);
+                switch (flagName.toLowerCase()) {
+                    case "pvp" -> {
+                        BooleanFlag pvpFlag = GlobalFlagContainer.getInstance().getFlag(PvPFlag.class);
+                        boolean currentValue = plot.getFlag(pvpFlag);
+                        plot.setFlag(pvpFlag, !currentValue);
+                        return true;
+                    }
+                    case "fly" -> {
+                        BooleanFlag flyFlag = GlobalFlagContainer.getInstance().getFlag(FlyFlag.class);
+                        boolean currentValue = plot.getFlag(flyFlag);
+                        plot.setFlag(flyFlag, !currentValue);
+                        return true;
+                    }
+                    case "weather" -> {
+                        BooleanFlag weatherFlag = GlobalFlagContainer.getInstance().getFlag(WeatherFlag.class);
+                        boolean currentValue = plot.getFlag(weatherFlag);
+                        plot.setFlag(weatherFlag, !currentValue);
+                        return true;
+                    }
+                    case "time" -> {
+                        if (value != null) {
+                            IntegerFlag timeFlag = GlobalFlagContainer.getInstance().getFlag(TimeFlag.class);
+                            plot.setFlag(timeFlag, Integer.parseInt(value));
+                            return true;
+                        }
+                        return false;
+                    }
+                    case "gamemode" -> {
+                        if (value != null) {
+                            GameModeFlag gameModeFlag = GlobalFlagContainer.getInstance().getFlag(GameModeFlag.class);
+                            plot.setFlag(gameModeFlag, value);
+                            return true;
+                        }
+                        return false;
+                    }
+                    default -> {
+                        return false;
+                    }
                 }
-                return true;
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
         });
+    }
+
+    public void setPlotBiome(Plot plot, String biome) {
+        try {
+            BiomeFlag biomeFlag = GlobalFlagContainer.getInstance().getFlag(BiomeFlag.class);
+            plot.setFlag(biomeFlag, biome.toUpperCase());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
