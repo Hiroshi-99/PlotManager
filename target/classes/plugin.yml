@@ -1,0 +1,18 @@
+name: PlotManager
+version: '1.0'
+main: org.champa.plotManager.PlotManager
+api-version: '1.21'
+depend: [PlotSquared]
+commands:
+  plot:
+    description: Main plot management command
+    usage: /<command> [plots|biome|settings|help]
+    aliases: [plotmanager, pm]
+    permission: plotmanager.use
+permissions:
+  plotmanager.use:
+    description: Allows use of plot manager
+    default: true
+  plotmanager.admin:
+    description: Allows use of admin features
+    default: op

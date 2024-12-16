@@ -1,0 +1,41 @@
+# File: src/main/resources/config.yml
+settings:
+  menu-title: "&8Plot Manager"
+  menu:
+    main:
+      size: 27
+      title: "&8Plot Manager"
+    plots:
+      size: 54
+      title: "&aYour Plots"
+    biome:
+      size: 54
+      title: "&bBiome Selection"
+    settings:
+      size: 36
+      title: "&6Plot Settings"
+
+  biomes:
+    allowed:
+      - PLAINS
+      - FOREST
+      - DESERT
+      - JUNGLE
+      - TAIGA
+      - SAVANNA
+      - SNOWY_PLAINS
+
+  flags:
+    enabled:
+      - pvp
+      - fly
+      - time
+      - weather
+      - mob-spawning
+      - leaf-decay
+
+  messages:
+    no-permission: "&cYou don't have permission to do that!"
+    plot-required: "&cYou must be standing in a plot!"
+    setting-changed: "&aSettings updated successfully!"
+    biome-changed: "&aBiome changed successfully!"
